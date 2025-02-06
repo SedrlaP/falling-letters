@@ -54,12 +54,28 @@ import { Application, Graphics, Text, Container, Ticker } from "pixi.js";
   app.stage.addChild(createRectangle());
   app.stage.addChild(createRectangle());
 
+  let lastTickTime: number = 0;
+  const tickInterval = 1; // 1 seconds
+
   const ticker = Ticker.shared;
   ticker.autoStart = false;
-  ticker.add(() => {
-    for (const rectangle of rectangles) {
-      rectangle.y += 1;
+
+  ticker.add((ticker: Ticker) => {
+    // Keep track of the time elapsed
+    lastTickTime += ticker.deltaTime / 60;
+    console.log(lastTickTime);
+    if (lastTickTime >= tickInterval) {
+      // Spawn new rectangle every 1 seconds
+      console.log('New rectangle spawned');
+      app.stage.addChild(createRectangle());
+      // Reset the timer
+      lastTickTime = 0;
     }
+      for (const rectangle of rectangles) {
+        rectangle.y += 1;
+      }
+      
+        
   }); 
   ticker.stop();  
 
