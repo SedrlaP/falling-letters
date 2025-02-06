@@ -45,7 +45,7 @@ import { Application, Graphics, Text, Container, Ticker } from "pixi.js";
     // set rectangle position where x is random and y is 0
     rectangle.position.set(
       Math.floor(Math.random() * (app.screen.width - sideLength)),
-      0
+      -sideLength
     );
     rectangles.push(rectangle);
     return rectangle;
