@@ -1,4 +1,4 @@
-import { Application, Graphics, Text, Container, Ticker } from "pixi.js";
+import { Application, Graphics, Container, Ticker } from "pixi.js";
 import { createStartStopButton } from "./createStartStopButton";
 import { createRectangle } from "./createRectangle";
 
@@ -23,10 +23,8 @@ import { createRectangle } from "./createRectangle";
   ticker.add((ticker: Ticker) => {
     // Keep track of the time elapsed
     lastTickTime += ticker.deltaTime / 60;
-    console.log(lastTickTime);
     if (lastTickTime >= tickInterval) {
       // Spawn new rectangle every 1 seconds
-      console.log('New rectangle spawned');
       const rectangle = createRectangle(app);
       rectangles.push(rectangle);
       app.stage.addChild(rectangle);
@@ -39,8 +37,6 @@ import { createRectangle } from "./createRectangle";
           ticker.stop();
         }
       }
-      
-        
   }); 
   ticker.stop();  
 
@@ -59,12 +55,10 @@ import { createRectangle } from "./createRectangle";
     }
   }
 
-
   const buttons = new Container();
   const startStopButton = createStartStopButton();
   startStopButton.on('pointerdown', () => startStopGame()); 
   buttons.addChild(startStopButton)
-  
   app.stage.addChild(buttons);
 
   
