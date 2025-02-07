@@ -79,11 +79,15 @@ import { createScoreText } from "./createScoreText";
     if (!running) {
       running = true;
       ticker.start();
+      // Add event listener when game is running
       window.addEventListener('keydown', handleKeyPress);
       
     } else if (running) {
       running = false;
       ticker.stop();
+      // Remove event listener when game is not running
+      // so the player can't "cheat" by stopping the game and pressing
+      // the right keys
       window.removeEventListener('keydown', handleKeyPress);
     }
   }
