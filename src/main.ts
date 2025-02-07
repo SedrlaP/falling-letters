@@ -79,6 +79,7 @@ import { createScoreText } from "./createScoreText";
     if (!running) {
       running = true;
       ticker.start();
+      window.addEventListener('keydown', handleKeyPress);
       
     } else if (running) {
       running = false;
@@ -86,8 +87,6 @@ import { createScoreText } from "./createScoreText";
       window.removeEventListener('keydown', handleKeyPress);
     }
   }
-
-  window.addEventListener('keydown', handleKeyPress);
   
   // Handle key press
   function handleKeyPress(event: KeyboardEvent) {
