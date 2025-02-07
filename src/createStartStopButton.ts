@@ -1,7 +1,7 @@
 import { Application, Graphics, Text}  from "pixi.js";
 
 
-export function createStartStopButton(app: Application, menuWidth: number) {
+export function createStartStopButton(app: Application, menuWidth: number, startStopGame: () => void) {
     // Set constants
     const BUTTON_RECT_WIDTH = 100;
     const BUTTON_RECT_HEIGHT = 70;
@@ -22,6 +22,7 @@ export function createStartStopButton(app: Application, menuWidth: number) {
     button.fill(0xFFFFFF);
     button.cursor = 'pointer';
     button.interactive = true;
+    button.on('pointerdown', () => startStopGame()); 
     button.addChild(buttonText);
     button.position.set(app.screen.width - menuWidth, 0);
 
