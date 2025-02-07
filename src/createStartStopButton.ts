@@ -1,12 +1,13 @@
-import { Graphics, Text}  from "pixi.js";
+import { Application, Graphics, Text}  from "pixi.js";
 
 
-export function createStartStopButton() {
+export function createStartStopButton(app: Application, menuWidth: number) {
     // Set constants
-    const BUTTON_RECT_SIDE_LENGTH= 100
-    const BUTTON_TEXT_COORDS = BUTTON_RECT_SIDE_LENGTH / 2
+    const BUTTON_RECT_WIDTH = 100;
+    const BUTTON_RECT_HEIGHT = 70;
+    const BUTTON_TEXT_COORDS = BUTTON_RECT_WIDTH / 2
     
-    const button = new Graphics();
+    // Create startStopButton text
     const buttonText = new Text({ text: 'Start / Stop', 
       style: { fontSize: 16} 
     });
@@ -14,12 +15,15 @@ export function createStartStopButton() {
     buttonText.anchor.set(0.5);
     buttonText.position.set(BUTTON_TEXT_COORDS, 35);
 
-    button.rect(0, 0, BUTTON_RECT_SIDE_LENGTH, 70);
+    // Create startStopButton
+    const button = new Graphics();
+
+    button.rect(0, 0, BUTTON_RECT_WIDTH, BUTTON_RECT_HEIGHT);
     button.fill(0xFFFFFF);
     button.cursor = 'pointer';
     button.interactive = true;
     button.addChild(buttonText);
-    button.position.set(0, 0);
+    button.position.set(app.screen.width - menuWidth, 0);
 
     return button; 
   }

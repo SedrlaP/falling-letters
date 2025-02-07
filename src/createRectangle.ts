@@ -1,17 +1,17 @@
 import { Application, Graphics, Text}  from "pixi.js";
 
-export function createRectangle(app: Application) {
-    // generate random rectangle height and width
+export function createRectangle(app: Application, menuWidth: number) {
+    // Generate random rectangle height and width
     const sideLength = Math.floor(Math.random() * 100) + 20;
     const rectangle = new Graphics();
 
-    // get text coordinates from side length
+    // Get text coordinates from side length
     const textCoordinates = sideLength / 2;
 
-    // get font size relative to side length
+    // Get font size relative to side length
     const fontSize = sideLength / 2;
 
-    // get random letter
+    // Get random letter
     const letters = 'ABCDE'; // String of uppercase letters
     const randomIndex = Math.floor(Math.random() * letters.length); // Get a random index
     const randomLetter = letters[randomIndex]; // Get the random letter
@@ -23,9 +23,9 @@ export function createRectangle(app: Application) {
     rectangle.fill(0x9a9a9a);
     rectangle.addChild(text);
 
-    // set rectangle position where x is random and y is 0
+    // Set rectangle position where x is random and y is 0
     rectangle.position.set(
-      Math.floor(Math.random() * (app.screen.width - sideLength)),
+      Math.floor(Math.random() * (app.screen.width - sideLength - menuWidth)),
       -sideLength
     );
 

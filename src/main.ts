@@ -1,4 +1,4 @@
-import { Application, Graphics, Container, Ticker } from "pixi.js";
+import { Application, Graphics, Container, Ticker, Text } from "pixi.js";
 import { createStartStopButton } from "./createStartStopButton";
 import { createRectangle } from "./createRectangle";
 
@@ -11,9 +11,24 @@ import { createRectangle } from "./createRectangle";
 
   // Append the application canvas to the document body
   document.getElementById("pixi-container")!.appendChild(app.canvas);
-    
+  
+  // Set the menu width
+  const MENU_WIDTH = 100;
+
   let rectangles: Graphics[] = [];
   
+  function addScore() {
+    score += 1;
+    scoreText.text = 'Score: ' + score;
+  }
+
+  function decreaseScore() {
+    if (score > 0) {
+      score -= 1;
+      scoreText.text = 'Score: ' + score;
+    }
+  }
+
   let lastTickTime: number = 0;
   const tickInterval = 1; // 1 seconds
 
@@ -25,7 +40,7 @@ import { createRectangle } from "./createRectangle";
     lastTickTime += ticker.deltaTime / 60;
     if (lastTickTime >= tickInterval) {
       // Spawn new rectangle every 1 seconds
-      const rectangle = createRectangle(app);
+      const rectangle = createRectangle(app, MENU_WIDTH);
       rectangles.push(rectangle);
       app.stage.addChild(rectangle);
       // Reset the timer
@@ -35,6 +50,8 @@ import { createRectangle } from "./createRectangle";
         rectangle.y += 1;
         if (rectangle.y > app.screen.height - rectangle.height) {
           ticker.stop();
+          scoreText.text = 'Score: ' + 0;
+          // GAME OVER
         }
       }
   }); 
@@ -61,24 +78,36 @@ import { createRectangle } from "./createRectangle";
     const array = rectangles.filter((rectangle) => {
       if (rectangle.children[0].text === upperCaseKey) return rectangle;
     });
-    console.log("array", array);
-    console.log("rectangles", rectangles);
+    
+    // If there are more than 1 rectangles with the same letter,
+    // remove them all from the rectangles array
+    // and add 1 to the score
+
     if (array.length > 1) {
       for (let rect of array) {
         const index = rectangles.indexOf(rect);
         rectangles.splice(index, 1);
         app.stage.removeChild(rect);
       }
+      addScore();
+    } else {
+      decreaseScore();
     }
   }
   
 
-  const buttons = new Container();
-  const startStopButton = createStartStopButton();
-  startStopButton.on('pointerdown', () => startStopGame()); 
-  buttons.addChild(startStopButton)
-  app.stage.addChild(buttons);
 
-  
+  const menuContainer = new Container();
+  const startStopButton = createStartStopButton(app, MENU_WIDTH);
+  startStopButton.on('pointerdown', () => startStopGame()); 
+  menuContainer.addChild(startStopButton)
+  let score = 0;
+  const scoreText = new Text({ text: 'Score: ' + score, 
+        style: { fontSize: 16} 
+      });
+  scoreText.position.set(app.screen.width - MENU_WIDTH, 70)
+  menuContainer.addChild(scoreText);
+  app.stage.addChild(menuContainer);
+
 
 })();
