@@ -32,7 +32,7 @@ import { createRectangle } from "./createRectangle";
       lastTickTime = 0;
     }
       for (const rectangle of rectangles) {
-        rectangle.y += 5;
+        rectangle.y += 1;
         if (rectangle.y > app.screen.height - rectangle.height) {
           ticker.stop();
         }
@@ -54,6 +54,24 @@ import { createRectangle } from "./createRectangle";
       ticker.stop();
     }
   }
+
+  window.addEventListener('keydown', (event) => { handleKeyPress(event); });
+  function handleKeyPress(event: KeyboardEvent) {
+    const upperCaseKey = event.key.toUpperCase();
+    const array = rectangles.filter((rectangle) => {
+      if (rectangle.children[0].text === upperCaseKey) return rectangle;
+    });
+    console.log("array", array);
+    console.log("rectangles", rectangles);
+    if (array.length > 1) {
+      for (let rect of array) {
+        const index = rectangles.indexOf(rect);
+        rectangles.splice(index, 1);
+        app.stage.removeChild(rect);
+      }
+    }
+  }
+  
 
   const buttons = new Container();
   const startStopButton = createStartStopButton();
