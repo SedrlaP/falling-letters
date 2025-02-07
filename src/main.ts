@@ -28,6 +28,21 @@ import { createScoreText } from "./createScoreText";
   menuContainer.addChild(startStopButton)
   app.stage.addChild(menuContainer);
   
+  function endGame(result: string) {
+    // Stop the ticker
+    ticker.stop();
+    // Remove all rectangles from the stage
+    rectangles.forEach((rectangle) => app.stage.removeChild(rectangle));
+    // Reset the rectangles array
+    rectangles = [];
+    // Reset the score
+    resetScore();
+    // Remove event listener
+    window.removeEventListener('keydown', handleKeyPress);
+    // Set running to false
+    running = false;
+  }
+
   function addScore() {
     score += 1;
     scoreText.text = 'Score: ' + score;
@@ -46,7 +61,7 @@ import { createScoreText } from "./createScoreText";
   }
 
   let lastTickTime: number = 0;
-  const tickInterval = 1; // 1 seconds
+  const tickInterval = 0.5; // 1/2 seconds
 
   const ticker = Ticker.shared;
   ticker.autoStart = false;
@@ -55,21 +70,29 @@ import { createScoreText } from "./createScoreText";
     // Keep track of the time elapsed
     lastTickTime += ticker.deltaTime / 60;
     if (lastTickTime >= tickInterval) {
-      // Spawn new rectangle every 1 seconds
+      // Spawn new rectangle every 1/2 seconds
       const rectangle = createRectangle(app, MENU_WIDTH);
       rectangles.push(rectangle);
       app.stage.addChild(rectangle);
       // Reset the timer
       lastTickTime = 0;
     }
-      for (const rectangle of rectangles) {
-        rectangle.y += 1;
-        if (rectangle.y > app.screen.height - rectangle.height) {
-          ticker.stop();
-          resetScore();
-          // GAME OVER
-        }
+
+    // Check if the score is 50, end the game
+    if (score >= 50) {
+      // Win game screen
+      endGame("win");
+    }
+
+    for (const rectangle of rectangles) {
+      rectangle.y += 1;
+      if (rectangle.y > app.screen.height - rectangle.height) {
+        ticker.stop();
+        resetScore();
+        // GAME OVER
+        endGame("lose");
       }
+    }
   }); 
   ticker.stop();  
 
@@ -114,4 +137,8 @@ import { createScoreText } from "./createScoreText";
     }
   }
 
+  // TODO: Add restart game feature, add end game screen, refactor code
+  // Add faster falling speed with higher score, end game at 50 score
+
+  
 })();
