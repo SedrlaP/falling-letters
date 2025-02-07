@@ -34,7 +34,10 @@ import { createRectangle } from "./createRectangle";
       lastTickTime = 0;
     }
       for (const rectangle of rectangles) {
-        rectangle.y += 1;
+        rectangle.y += 5;
+        if (rectangle.y > app.screen.height - rectangle.height) {
+          ticker.stop();
+        }
       }
       
         
