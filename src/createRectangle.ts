@@ -1,0 +1,35 @@
+import { Application, Graphics, Text}  from "pixi.js";
+
+export function createRectangle(app: Application) {
+    // generate random rectangle height and width
+    const sideLength = Math.floor(Math.random() * 100) + 20;
+    const rectangle = new Graphics();
+
+    // get text coordinates from side length
+    const textCoordinates = sideLength / 2;
+
+    // get font size relative to side length
+    const fontSize = sideLength / 2;
+
+    // get random letter
+    const letters = 'ABCDE'; // String of uppercase letters
+    const randomIndex = Math.floor(Math.random() * letters.length); // Get a random index
+    const randomLetter = letters[randomIndex]; // Get the random letter
+
+    const text = new Text({ text: randomLetter, style: { fontSize: fontSize}});
+    text.anchor.set(0.5);
+    text.position.set(textCoordinates, textCoordinates);
+    rectangle.rect(0, 0, sideLength, sideLength);
+    rectangle.fill(0x9a9a9a);
+    rectangle.addChild(text);
+
+    // set rectangle position where x is random and y is 0
+    rectangle.position.set(
+      Math.floor(Math.random() * (app.screen.width - sideLength)),
+      -sideLength
+    );
+
+    return rectangle;
+  } 
+
+  
