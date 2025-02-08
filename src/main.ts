@@ -3,6 +3,7 @@ import { createStartStopButton } from "./createStartStopButton";
 import { createRectangle } from "./createRectangle";
 import { createScoreText } from "./createScoreText";
 import { createResetButton } from "./createResetButton";
+import { increaseScore, decreaseScore, resetScore } from "./handleScore";
 
 (async () => {
   // Create a new application
@@ -16,10 +17,12 @@ import { createResetButton } from "./createResetButton";
   
   // Set constants
   const MENU_WIDTH = 120;
+  const BASE_SPEED = 1;
+  const SPEED_INCREASE_PER_POINT = 0.1;
 
   // Set initial values
   let rectangles: Graphics[] = [];
-  let score = 0;
+  let score: number = 0;
 
   // Setup menu
   const menuContainer = new Container();
@@ -81,7 +84,7 @@ import { createResetButton } from "./createResetButton";
     // Reset data to initial state
 
     // Reset the score
-    resetScore();
+    score = resetScore(score, scoreText);
     
     // Reset score text position
     scoreText.position.set(app.screen.width - MENU_WIDTH, startStopButton.height);
@@ -99,23 +102,7 @@ import { createResetButton } from "./createResetButton";
     app.stage.removeChild(endGameText);
   }
   
-
-  function addScore() {
-    score += 1;
-    scoreText.text = 'Score: ' + score;
-  }
-
-  function decreaseScore() {
-    if (score > 0) {
-      score -= 1;
-      scoreText.text = 'Score: ' + score;
-    }
-  }
   
-  function resetScore() {
-    score = 0;
-    scoreText.text = 'Score: ' + score;
-  }
 
   let lastTickTime: number = 0;
   const tickInterval = 0.5; // 1/2 seconds
@@ -127,10 +114,12 @@ import { createResetButton } from "./createResetButton";
     // Keep track of the time elapsed
     lastTickTime += ticker.deltaTime / 60;
     if (lastTickTime >= tickInterval) {
+
       // Spawn new rectangle every 1/2 seconds
       const rectangle = createRectangle(app, MENU_WIDTH);
       rectangles.push(rectangle);
       app.stage.addChild(rectangle);
+
       // Reset the timer
       lastTickTime = 0;
     }
@@ -141,9 +130,13 @@ import { createResetButton } from "./createResetButton";
       endGame("win");
     }
 
+    // Increase the falling speed based on the score
+    let fallingSpeed = BASE_SPEED + (score * SPEED_INCREASE_PER_POINT);
+
     // Make the rectangles fall
     for (const rectangle of rectangles) {
-      rectangle.y += 10;
+      rectangle.y += fallingSpeed;
+
       // Check if the rectangle has reached the bottom of the screen
       if (rectangle.y > app.screen.height - rectangle.height) {
         ticker.stop();
@@ -189,14 +182,14 @@ import { createResetButton } from "./createResetButton";
         rectangles.splice(index, 1);
         app.stage.removeChild(rect);
       }
-      addScore();
+      score = increaseScore(score, scoreText);
     } else {
-      decreaseScore();
+      score = decreaseScore(score, scoreText);
     }
   }
 
   // TODO: refactor code
-  // Add faster falling speed with higher score, end game at 50 score
+
 
 
 
