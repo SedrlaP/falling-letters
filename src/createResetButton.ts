@@ -19,15 +19,15 @@ export function createResetButton(
 
     // Create resetButton
     const button = new Container();
-    const btnBg = new Graphics();
+    const buttonBg = new Graphics();
 
-    btnBg.roundRect(0, 0, BUTTON_RECT_WIDTH, BUTTON_RECT_HEIGHT, 6);
-    btnBg.fill(0xFFFFFF);
-    btnBg.stroke({ width: 2, color: 0x000000 });
+    buttonBg.roundRect(0, 0, BUTTON_RECT_WIDTH, BUTTON_RECT_HEIGHT, 6);
+    buttonBg.fill(0xFFFFFF);
+    buttonBg.stroke({ width: 2, color: 0x000000 });
     button.cursor = 'pointer';
     button.interactive = true;
     button.on('pointerdown', () => restartGame()); 
-    button.addChild(btnBg)
+    button.addChild(buttonBg)
     button.addChild(buttonText);
     button.position.set((app.screen.width - BUTTON_RECT_WIDTH) / 2, (app.screen.height - BUTTON_RECT_WIDTH) / 2 );
 
