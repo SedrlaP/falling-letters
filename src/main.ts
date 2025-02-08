@@ -102,11 +102,8 @@ import { increaseScore, decreaseScore, resetScore } from "./handleScore";
     app.stage.removeChild(endGameText);
   }
   
-  
-
   let lastTickTime: number = 0;
   const tickInterval = 0.5; // 1/2 seconds
-
   const ticker = Ticker.shared;
   ticker.autoStart = false;
 
