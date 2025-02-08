@@ -1,12 +1,16 @@
-import { Application, Graphics, Text}  from "pixi.js";
+import { Application, Container, Graphics, Text}  from "pixi.js";
 
 
-export function createStartStopButton(app: Application, MENU_WIDTH: number, startStopGame: () => void) {
-    // Set constants
-    const BUTTON_RECT_WIDTH = 120;
-    const BUTTON_RECT_HEIGHT = 50;
-    const BUTTON_TEXT_X = BUTTON_RECT_WIDTH / 2
-    const BUTTON_TEXT_Y = BUTTON_RECT_HEIGHT / 2
+export function createStartStopButton(
+  app: Application, 
+  MENU_WIDTH: number,
+  MENU_Y: number, 
+  startStopGame: () => void,
+  BUTTON_RECT_WIDTH: number,
+  BUTTON_RECT_HEIGHT: number,
+  BUTTON_TEXT_X: number,
+  BUTTON_TEXT_Y: number,
+) {
     
     // Create startStopButton text
     const buttonText = new Text({ text: 'Start / Stop', 
@@ -17,15 +21,17 @@ export function createStartStopButton(app: Application, MENU_WIDTH: number, star
     buttonText.position.set(BUTTON_TEXT_X, BUTTON_TEXT_Y);
 
     // Create startStopButton
-    const button = new Graphics();
-
-    button.rect(0, 0, BUTTON_RECT_WIDTH, BUTTON_RECT_HEIGHT);
-    button.fill(0xFFFFFF);
+    const button = new Container();
+    const btnBg = new Graphics();
+    btnBg.rect(0, 0, BUTTON_RECT_WIDTH, BUTTON_RECT_HEIGHT);
+    btnBg.fill(0xFFFFFF);
     button.cursor = 'pointer';
     button.interactive = true;
     button.on('pointerdown', () => startStopGame()); 
+    button.addChild(btnBg)
     button.addChild(buttonText);
-    button.position.set(app.screen.width - MENU_WIDTH, 0);
+    
+    button.position.set(app.screen.width - MENU_WIDTH, MENU_Y);
 
     return button; 
   }
