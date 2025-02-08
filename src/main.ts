@@ -15,12 +15,19 @@ import { increaseScore, decreaseScore, resetScore } from "./handleScore";
   // Append the application canvas to the document body
   document.getElementById("pixi-container")!.appendChild(app.canvas);
   
-  // Set constants
-  const MENU_WIDTH = 120;
-  const BASE_SPEED = 1;
+  // Set game constants
+  const BASE_SPEED = 20;
   const SPEED_INCREASE_PER_POINT = 0.05;
   const BASE_SPAWN_TIME = 1/3; // seconds
-  const SPAWN_RATE_FACTOR = 0.05;
+  const SPAWN_RATE_FACTOR = 0.1;
+
+  // Set layout constants
+  const MENU_WIDTH = 150;
+  const MENU_Y = 100;
+  const BUTTON_RECT_WIDTH = 120;
+  const BUTTON_RECT_HEIGHT = 50;
+  const BUTTON_TEXT_X = BUTTON_RECT_WIDTH / 2
+  const BUTTON_TEXT_Y = BUTTON_RECT_HEIGHT / 2
 
   // Set initial values
   let rectangles: Graphics[] = [];
@@ -28,20 +35,47 @@ import { increaseScore, decreaseScore, resetScore } from "./handleScore";
 
   // Setup menu
   const menuContainer = new Container();
-  const startStopButton = createStartStopButton(app, MENU_WIDTH, startStopGame);
-  const scoreText = createScoreText(app, score, MENU_WIDTH, startStopButton.height);
+  const startStopButton = createStartStopButton(
+    app, 
+    MENU_WIDTH, 
+    MENU_Y,
+    startStopGame,
+    BUTTON_RECT_WIDTH,
+    BUTTON_RECT_HEIGHT,
+    BUTTON_TEXT_X,
+    BUTTON_TEXT_Y
+  );
+  const menuLine = new Graphics();
+  menuLine.rect(app.screen.width - MENU_WIDTH, 0, 1, app.screen.height)
+  menuLine.fill(0x000000)
+
+  const scoreText = createScoreText(
+    app, 
+    score, 
+    MENU_WIDTH, 
+    MENU_Y,
+    startStopButton.height
+  );
+  menuContainer.addChild(menuLine)
   menuContainer.addChild(scoreText);
   menuContainer.addChild(startStopButton)
   app.stage.addChild(menuContainer);
 
 
   // Create restart game button
-  const restartGameButton = createResetButton(app, restartGame);
+  const restartGameButton = createResetButton(
+    app, 
+    restartGame,
+    BUTTON_RECT_WIDTH,
+    BUTTON_RECT_HEIGHT,
+    BUTTON_TEXT_X,
+    BUTTON_TEXT_Y
+  );
   
   const endGameText = new Text({ text: '', 
     style: { fontSize: 24} 
   });
-  
+
   function endGame(result: string) {
     // Add end game text
     if (result === "win") {
@@ -49,7 +83,9 @@ import { increaseScore, decreaseScore, resetScore } from "./handleScore";
     } else if (result === "lose") {
       endGameText.text = 'You lose!';
     }
-    endGameText.position.set((app.screen.width - endGameText.width) / 2, app.screen.height / 2);
+
+    // Set endgame text position
+    endGameText.position.set((app.screen.width - endGameText.width) / 2, (app.screen.height / 2) - restartGameButton.height - 10);
 
     app.stage.addChild(endGameText);
 
@@ -72,13 +108,13 @@ import { increaseScore, decreaseScore, resetScore } from "./handleScore";
     startStopButton.visible = false;
     
     // Move button to the correct position if the window was resized
-    restartGameButton.position.set((app.screen.width - restartGameButton.width) / 2, (app.screen.height / 2) + endGameText.height + 5)
+    restartGameButton.position.set((app.screen.width - restartGameButton.width) / 2, (app.screen.height - restartGameButton.height) / 2)
     
     // Add restart game button
     app.stage.addChild(restartGameButton);
     
     // Move score text to the center of the screen
-    scoreText.position.set((app.screen.width - scoreText.width) / 2, (app.screen.height / 2) + restartGameButton.height + endGameText.height + 15);
+    scoreText.position.set((app.screen.width - scoreText.width) / 2, (app.screen.height + restartGameButton.height + 10) / 2 );
   }
 
   function restartGame() {
@@ -89,13 +125,13 @@ import { increaseScore, decreaseScore, resetScore } from "./handleScore";
     score = resetScore(score, scoreText);
     
     // Reset score text position
-    scoreText.position.set(app.screen.width - MENU_WIDTH, startStopButton.height);
+    scoreText.position.set(app.screen.width - (MENU_WIDTH + scoreText.width) / 2, startStopButton.height + MENU_Y);
 
     // Show start stop button
     startStopButton.visible = true;
     
     // Move button to the correct position if the window was resized
-    startStopButton.position.set(app.screen.width - MENU_WIDTH, 0);
+    startStopButton.position.set(app.screen.width - (MENU_WIDTH + BUTTON_RECT_WIDTH) / 2, MENU_Y);
 
     // Remove restart game button
     app.stage.removeChild(restartGameButton);
@@ -134,7 +170,6 @@ import { increaseScore, decreaseScore, resetScore } from "./handleScore";
       endGame("win");
     }
 
-
     // Make the rectangles fall
     for (const rectangle of rectangles) {
       rectangle.y += fallingSpeed;
@@ -146,10 +181,11 @@ import { increaseScore, decreaseScore, resetScore } from "./handleScore";
         endGame("lose");
       }
     }
-    console.log(lastSpawnTime, "LAST SPAWN TIME")
-    console.log(spawnRate, "SPAWN RATE")
-    console.log(fallingSpeed, "FALLIN SPEED")
+
   }); 
+
+  
+
   ticker.stop();  
 
   let running = false;
@@ -175,7 +211,7 @@ import { increaseScore, decreaseScore, resetScore } from "./handleScore";
   function handleKeyPress(event: KeyboardEvent) {
     const upperCaseKey = event.key.toUpperCase();
     const array = rectangles.filter((rectangle) => {
-      if (rectangle.children[0].text === upperCaseKey) return rectangle;
+      if ((rectangle.children[0] as Text).text === upperCaseKey) return rectangle;
     });
     
     // If there are more than 1 rectangles with the same letter,
