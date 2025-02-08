@@ -1,4 +1,4 @@
-import { Application, Graphics, Text}  from "pixi.js";
+import { Application, Graphics, Container, Text}  from "pixi.js";
 
 
 export function createResetButton(
@@ -18,9 +18,9 @@ export function createResetButton(
     buttonText.position.set(BUTTON_TEXT_X, BUTTON_TEXT_Y);
 
     // Create resetButton
-    const button = new Graphics();
+    const button = new Container();
     const btnBg = new Graphics();
-    
+
     btnBg.rect(0, 0, BUTTON_RECT_WIDTH, BUTTON_RECT_HEIGHT);
     btnBg.fill(0xFFFFFF);
     button.cursor = 'pointer';
