@@ -1,21 +1,23 @@
-import {Text}  from "pixi.js";
+import {Container, Text}  from "pixi.js";
 
-export function increaseScore(score: number, scoreText: Text) {
+export function increaseScore(score: number, scoreText: Container) {
     score += 1;
-    scoreText.text = 'Score: ' + score;
+    (scoreText.children[1].children[1] as Text).text = score;
+    
     return score
 }
 
-export function decreaseScore(score: number, scoreText: Text) {
+export function decreaseScore(score: number, scoreText: Container) {
     score -= 2;
     // If score is less than 0 return 0 else return score
-    score = score <= 0 ? 0 : score
-    scoreText.text = 'Score: ' + score;
+    score = score <= 0 ? 0 : score;
+    (scoreText.children[1].children[1] as Text).text = score;
     return score
 }
   
-export function resetScore(score: number, scoreText: Text) {
+export function resetScore(score: number, scoreText: Container) {
     score = 0;
-    scoreText.text = 'Score: ' + score;
+    (scoreText.children[1].children[1] as Text).text = score;
+
     return score
 }
