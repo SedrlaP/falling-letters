@@ -200,7 +200,6 @@ import { createEndGameText } from "./createEndGameText";
       window.removeEventListener('keydown', handleKeyPress);
     }
   }
-  console.log(scoreText)
   // Handle key press
   function handleKeyPress(event: KeyboardEvent) {
     const upperCaseKey = event.key.toUpperCase();
