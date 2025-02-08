@@ -21,14 +21,15 @@ export function createResetButton(
     const button = new Container();
     const btnBg = new Graphics();
 
-    btnBg.rect(0, 0, BUTTON_RECT_WIDTH, BUTTON_RECT_HEIGHT);
+    btnBg.roundRect(0, 0, BUTTON_RECT_WIDTH, BUTTON_RECT_HEIGHT, 6);
     btnBg.fill(0xFFFFFF);
+    btnBg.stroke({ width: 2, color: 0x000000 });
     button.cursor = 'pointer';
     button.interactive = true;
     button.on('pointerdown', () => restartGame()); 
     button.addChild(btnBg)
     button.addChild(buttonText);
-    button.position.set((app.screen.width - BUTTON_RECT_WIDTH) / 2, (app.screen.height / 2) + 50 );
+    button.position.set((app.screen.width - BUTTON_RECT_WIDTH) / 2, (app.screen.height - BUTTON_RECT_WIDTH) / 2 );
 
     return button; 
   }
