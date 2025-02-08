@@ -2,6 +2,7 @@ import { Application, Graphics, Container, Ticker, Text } from "pixi.js";
 import { createStartStopButton } from "./createStartStopButton";
 import { createRectangle } from "./createRectangle";
 import { createScoreText } from "./createScoreText";
+import { createResetButton } from "./createResetButton";
 
 (async () => {
   // Create a new application
@@ -13,8 +14,8 @@ import { createScoreText } from "./createScoreText";
   // Append the application canvas to the document body
   document.getElementById("pixi-container")!.appendChild(app.canvas);
   
-  // Set the menu width
-  const MENU_WIDTH = 100;
+  // Set constants
+  const MENU_WIDTH = 120;
 
   // Set initial values
   let rectangles: Graphics[] = [];
@@ -23,25 +24,81 @@ import { createScoreText } from "./createScoreText";
   // Setup menu
   const menuContainer = new Container();
   const startStopButton = createStartStopButton(app, MENU_WIDTH, startStopGame);
-  const scoreText = createScoreText(app, score, MENU_WIDTH);
+  const scoreText = createScoreText(app, score, MENU_WIDTH, startStopButton.height);
   menuContainer.addChild(scoreText);
   menuContainer.addChild(startStopButton)
   app.stage.addChild(menuContainer);
+
+
+  // Create restart game button
+  const restartGameButton = createResetButton(app, restartGame);
+  
+  const endGameText = new Text({ text: '', 
+    style: { fontSize: 24} 
+  });
   
   function endGame(result: string) {
+    // Add end game text
+    if (result === "win") {
+      endGameText.text = 'Congratulations, you won!';
+    } else if (result === "lose") {
+      endGameText.text = 'You lose!';
+    }
+    endGameText.position.set((app.screen.width - endGameText.width) / 2, app.screen.height / 2);
+
+    app.stage.addChild(endGameText);
+
     // Stop the ticker
     ticker.stop();
+
     // Remove all rectangles from the stage
     rectangles.forEach((rectangle) => app.stage.removeChild(rectangle));
+    
     // Reset the rectangles array
     rectangles = [];
-    // Reset the score
-    resetScore();
+    
     // Remove event listener
     window.removeEventListener('keydown', handleKeyPress);
+    
     // Set running to false
     running = false;
+    
+    // Hide start stop button
+    startStopButton.visible = false;
+    
+    // Move button to the correct position if the window was resized
+    restartGameButton.position.set((app.screen.width - restartGameButton.width) / 2, (app.screen.height / 2) + endGameText.height + 5)
+    
+    // Add restart game button
+    app.stage.addChild(restartGameButton);
+    
+    // Move score text to the center of the screen
+    scoreText.position.set((app.screen.width - scoreText.width) / 2, (app.screen.height / 2) + restartGameButton.height + endGameText.height + 15);
   }
+
+  function restartGame() {
+    // Handle restart game button click
+    // Reset data to initial state
+
+    // Reset the score
+    resetScore();
+    
+    // Reset score text position
+    scoreText.position.set(app.screen.width - MENU_WIDTH, startStopButton.height);
+
+    // Show start stop button
+    startStopButton.visible = true;
+    
+    // Move button to the correct position if the window was resized
+    startStopButton.position.set(app.screen.width - MENU_WIDTH, 0);
+
+    // Remove restart game button
+    app.stage.removeChild(restartGameButton);
+
+    // Remove end game text
+    app.stage.removeChild(endGameText);
+  }
+  
 
   function addScore() {
     score += 1;
@@ -84,11 +141,12 @@ import { createScoreText } from "./createScoreText";
       endGame("win");
     }
 
+    // Make the rectangles fall
     for (const rectangle of rectangles) {
-      rectangle.y += 1;
+      rectangle.y += 10;
+      // Check if the rectangle has reached the bottom of the screen
       if (rectangle.y > app.screen.height - rectangle.height) {
         ticker.stop();
-        resetScore();
         // GAME OVER
         endGame("lose");
       }
@@ -137,8 +195,11 @@ import { createScoreText } from "./createScoreText";
     }
   }
 
-  // TODO: Add restart game feature, add end game screen, refactor code
+  // TODO: refactor code
   // Add faster falling speed with higher score, end game at 50 score
+
+
+
 
   
 })();
