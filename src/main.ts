@@ -45,7 +45,7 @@ import { createEndGameText } from "./createEndGameText";
     app, 
     MENU_WIDTH, 
     MENU_Y,
-    startStopGame,
+    handleStartStopGame,
     BUTTON_RECT_WIDTH,
     BUTTON_RECT_HEIGHT,
     BUTTON_TEXT_X,
@@ -185,7 +185,7 @@ import { createEndGameText } from "./createEndGameText";
 
   ticker.stop();  
 
-  function startStopGame() {
+  function handleStartStopGame() {
     if (!running) {
       running = true;
       ticker.start();
