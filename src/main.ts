@@ -4,19 +4,20 @@ import { createRectangle } from "./createRectangle";
 import { createScoreText } from "./createScoreText";
 import { createResetButton } from "./createResetButton";
 import { increaseScore, decreaseScore, resetScore } from "./handleScore";
+import { createEndGameText } from "./createEndGameText";
 
 (async () => {
   // Create a new application
   const app = new Application();
 
   // Initialize the application
-  await app.init({background: '0x1099bb', resizeTo: window });
+  await app.init({ background: '0x1099bb', resizeTo: window });
 
   // Append the application canvas to the document body
   document.getElementById("pixi-container")!.appendChild(app.canvas);
   
   // Set game constants
-  const BASE_SPEED = 20;
+  const BASE_SPEED = 1;
   const SPEED_INCREASE_PER_POINT = 0.05;
   const BASE_SPAWN_TIME = 1/3; // seconds
   const SPAWN_RATE_FACTOR = 0.1;
@@ -32,6 +33,11 @@ import { increaseScore, decreaseScore, resetScore } from "./handleScore";
   // Set initial values
   let rectangles: Graphics[] = [];
   let score: number = 0;
+  let running: boolean = false;
+  let lastSpawnTime: number = 0;
+  const ticker = Ticker.shared;
+  ticker.autoStart = false;
+
 
   // Setup menu
   const menuContainer = new Container();
@@ -72,9 +78,7 @@ import { increaseScore, decreaseScore, resetScore } from "./handleScore";
     BUTTON_TEXT_Y
   );
   
-  const endGameText = new Text({ text: '', 
-    style: { fontSize: 24} 
-  });
+  const endGameText = createEndGameText()
 
   function endGame(result: string) {
     // Add end game text
@@ -139,11 +143,6 @@ import { increaseScore, decreaseScore, resetScore } from "./handleScore";
     // Remove end game text
     app.stage.removeChild(endGameText);
   }
-  
-  let lastSpawnTime: number = 0;
-  
-  const ticker = Ticker.shared;
-  ticker.autoStart = false;
 
   ticker.add((ticker: Ticker) => {
 
@@ -184,11 +183,7 @@ import { increaseScore, decreaseScore, resetScore } from "./handleScore";
 
   }); 
 
-  
-
   ticker.stop();  
-
-  let running = false;
 
   function startStopGame() {
     if (!running) {
@@ -229,11 +224,4 @@ import { increaseScore, decreaseScore, resetScore } from "./handleScore";
     }
   }
 
-  // TODO: refactor code
-
-
-
-
-
-  
 })();
