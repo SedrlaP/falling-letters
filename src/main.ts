@@ -11,7 +11,7 @@ import { createEndGameText } from "./createEndGameText";
   const app = new Application();
 
   // Initialize the application
-  await app.init({ background: '0x1099bb', resizeTo: window });
+  await app.init({ background: '0xFFFFFF', resizeTo: window });
 
   // Append the application canvas to the document body
   document.getElementById("pixi-container")!.appendChild(app.canvas);
@@ -31,7 +31,7 @@ import { createEndGameText } from "./createEndGameText";
   const BUTTON_TEXT_Y = BUTTON_RECT_HEIGHT / 2
 
   // Set initial values
-  let rectangles: Graphics[] = [];
+  let rectangles: Container[] = [];
   let score: number = 0;
   let running: boolean = false;
   let lastSpawnTime: number = 0;
@@ -66,7 +66,6 @@ import { createEndGameText } from "./createEndGameText";
   menuContainer.addChild(scoreText);
   menuContainer.addChild(startStopButton)
   app.stage.addChild(menuContainer);
-
 
   // Create restart game button
   const restartGameButton = createResetButton(
@@ -129,7 +128,7 @@ import { createEndGameText } from "./createEndGameText";
     score = resetScore(score, scoreText);
     
     // Reset score text position
-    scoreText.position.set(app.screen.width - (MENU_WIDTH + scoreText.width) / 2, startStopButton.height + MENU_Y);
+    scoreText.position.set(app.screen.width - (MENU_WIDTH + scoreText.width) / 2, startStopButton.height + MENU_Y + 5);
 
     // Show start stop button
     startStopButton.visible = true;
@@ -201,14 +200,13 @@ import { createEndGameText } from "./createEndGameText";
       window.removeEventListener('keydown', handleKeyPress);
     }
   }
-  
+  console.log(scoreText)
   // Handle key press
   function handleKeyPress(event: KeyboardEvent) {
     const upperCaseKey = event.key.toUpperCase();
     const array = rectangles.filter((rectangle) => {
-      if ((rectangle.children[0] as Text).text === upperCaseKey) return rectangle;
+      if ((rectangle.children[1] as Text).text === upperCaseKey) return rectangle;
     });
-    
     // If there are more than 1 rectangles with the same letter,
     // remove them all from the rectangles array
     // and add 1 to the score
