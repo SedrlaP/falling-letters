@@ -18,7 +18,9 @@ import { increaseScore, decreaseScore, resetScore } from "./handleScore";
   // Set constants
   const MENU_WIDTH = 120;
   const BASE_SPEED = 1;
-  const SPEED_INCREASE_PER_POINT = 0.1;
+  const SPEED_INCREASE_PER_POINT = 0.05;
+  const BASE_SPAWN_TIME = 1/3; // seconds
+  const SPAWN_RATE_FACTOR = 0.05;
 
   // Set initial values
   let rectangles: Graphics[] = [];
@@ -102,23 +104,28 @@ import { increaseScore, decreaseScore, resetScore } from "./handleScore";
     app.stage.removeChild(endGameText);
   }
   
-  let lastTickTime: number = 0;
-  const tickInterval = 0.5; // 1/2 seconds
+  let lastSpawnTime: number = 0;
+  
   const ticker = Ticker.shared;
   ticker.autoStart = false;
 
   ticker.add((ticker: Ticker) => {
-    // Keep track of the time elapsed
-    lastTickTime += ticker.deltaTime / 60;
-    if (lastTickTime >= tickInterval) {
 
-      // Spawn new rectangle every 1/2 seconds
+    // Increase the falling speed based on the score
+    let fallingSpeed = BASE_SPEED + (score * SPEED_INCREASE_PER_POINT);
+
+    let spawnRate = BASE_SPAWN_TIME / (1 + (fallingSpeed - BASE_SPEED) * SPAWN_RATE_FACTOR);
+
+    // Keep track of the time elapsed
+    lastSpawnTime += ticker.deltaTime / 60;
+    if (lastSpawnTime >= spawnRate) {
+      // Spawn new rectangle
       const rectangle = createRectangle(app, MENU_WIDTH);
       rectangles.push(rectangle);
       app.stage.addChild(rectangle);
 
       // Reset the timer
-      lastTickTime = 0;
+      lastSpawnTime = 0;
     }
 
     // Check if the score is 50, end the game
@@ -127,8 +134,6 @@ import { increaseScore, decreaseScore, resetScore } from "./handleScore";
       endGame("win");
     }
 
-    // Increase the falling speed based on the score
-    let fallingSpeed = BASE_SPEED + (score * SPEED_INCREASE_PER_POINT);
 
     // Make the rectangles fall
     for (const rectangle of rectangles) {
@@ -141,6 +146,9 @@ import { increaseScore, decreaseScore, resetScore } from "./handleScore";
         endGame("lose");
       }
     }
+    console.log(lastSpawnTime, "LAST SPAWN TIME")
+    console.log(spawnRate, "SPAWN RATE")
+    console.log(fallingSpeed, "FALLIN SPEED")
   }); 
   ticker.stop();  
 
