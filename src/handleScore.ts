@@ -7,10 +7,10 @@ export function increaseScore(score: number, scoreText: Text) {
 }
 
 export function decreaseScore(score: number, scoreText: Text) {
-    if (score > 0) {
-      score -= 1;
-      scoreText.text = 'Score: ' + score;
-    }
+    score -= 2;
+    // If score is less than 0 return 0 else return score
+    score = score <= 0 ? 0 : score
+    scoreText.text = 'Score: ' + score;
     return score
 }
   
