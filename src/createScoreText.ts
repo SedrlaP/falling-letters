@@ -10,6 +10,6 @@ export function createScoreText(
     const scoreText = new Text({ text: 'Score: ' + score, 
         style: { fontSize: 16} 
       });
-    scoreText.position.set(app.screen.width - MENU_WIDTH, SCORE_TEXT_HEIGHT_OFFSET + MENU_Y)
+    scoreText.position.set(app.screen.width - (MENU_WIDTH + scoreText.width) / 2, SCORE_TEXT_HEIGHT_OFFSET + MENU_Y)
     return scoreText;
 }
