@@ -21,6 +21,7 @@ import { createEndGameText } from "./createEndGameText";
   const SPEED_INCREASE_PER_POINT = 0.05;
   const BASE_SPAWN_TIME = 1/3; // seconds
   const SPAWN_RATE_FACTOR = 0.1;
+  const POINTS_TO_WIN = 50;
 
   // Set layout constants
   const MENU_WIDTH = 150;
@@ -167,7 +168,7 @@ import { createEndGameText } from "./createEndGameText";
     }
 
     // Check if the score is 50, end the game
-    if (score >= 50) {
+    if (score >= POINTS_TO_WIN) {
       // Win game screen
       endGame("win");
     }
@@ -179,7 +180,7 @@ import { createEndGameText } from "./createEndGameText";
       // Check if the rectangle has reached the bottom of the screen
       if (rectangle.y > app.screen.height - rectangle.height) {
         ticker.stop();
-        // GAME OVER
+        // Lose game screen
         endGame("lose");
       }
     }
