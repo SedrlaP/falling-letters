@@ -19,6 +19,8 @@ export function createScoreText(
     const scoreNumber = new Text({ text: score, 
       style: { fontSize : 16}
     });
+
+    scoreNumber.label = "scoreNumber"
     scoreNumber.anchor.set(0.5);
     scoreNumber.position.set(15, 15)
 
