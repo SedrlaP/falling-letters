@@ -141,6 +141,10 @@ import { createEndGameText } from "./createEndGameText";
 
     // Remove end game text
     app.stage.removeChild(endGameText);
+
+    // Set correct text on button
+    (startStopButton.getChildByName('buttonText') as Text).text = running ? 'Stop' : 'Start';
+
   }
 
   ticker.add((ticker: Ticker) => {
