@@ -199,6 +199,7 @@ import { createEndGameText } from "./createEndGameText";
       // the right keys
       window.removeEventListener('keydown', handleKeyPress);
     }
+    (startStopButton.getChildByName('buttonText') as Text).text = running ? 'Stop' : 'Start';
   }
   // Handle key press
   function handleKeyPress(event: KeyboardEvent) {
