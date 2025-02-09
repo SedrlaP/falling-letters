@@ -5,7 +5,7 @@ export function createStartStopButton(
   app: Application, 
   MENU_WIDTH: number,
   MENU_Y: number, 
-  startStopGame: () => void,
+  handleStartStopGame: () => void,
   BUTTON_RECT_WIDTH: number,
   BUTTON_RECT_HEIGHT: number,
   BUTTON_TEXT_X: number,
@@ -13,10 +13,10 @@ export function createStartStopButton(
 ) {
     
     // Create startStopButton text
-    const buttonText = new Text({ text: 'Start / Stop', 
+    const buttonText = new Text({ text: 'Start', 
       style: { fontSize: 16} 
     });
-
+    buttonText.label = "buttonText"
     buttonText.anchor.set(0.5);
     buttonText.position.set(BUTTON_TEXT_X, BUTTON_TEXT_Y);
 
@@ -28,7 +28,7 @@ export function createStartStopButton(
     buttonBg.stroke({ width: 2, color: 0x000000 });
     button.cursor = 'pointer';
     button.interactive = true;
-    button.on('pointerdown', () => startStopGame()); 
+    button.on('pointerdown', () => handleStartStopGame()); 
     button.addChild(buttonBg)
     button.addChild(buttonText);
     
