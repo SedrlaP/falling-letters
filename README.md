@@ -1,5 +1,7 @@
 # falling-letters
 
+My first project using PIXIJS
+
 Description:
 
 Letters are moving from top to bottom.
